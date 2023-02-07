@@ -5,16 +5,17 @@ var wordsPath = './resources/wordsList.json'
 const WORD_LENGTH_MAX = 100 // May want to make this dynamic and set to the max length of all words in json word list
 const words = require(wordsPath)
 
-// Initialize array to sort our dictionary of words by word length
+// Initialize dictionary with word lengths minus one (integers) as the key and an empty array to contain our string words as the value.
 var dictionary = {};
 for (let i = 0; i < WORD_LENGTH_MAX; i++){
     dictionary[i] = [];
 }
 
+// Parse Json file and store in our dictionary
 for (let key in words){
     let l = key.length - 1;
     dictionary[l].push(key);
 }
 
 //Testing
-console.log(dictionary[23]);
+console.log(dictionary[23][dictionary[23].length - 1]);
