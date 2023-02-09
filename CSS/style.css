@@ -1,0 +1,20 @@
+body {
+    background-color: #121212;
+    color: #fff;
+    font-family: 'Product Sans';
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+h1 {
+    text-align: center;
+    font-size: 75px;
+}
+
+.userInput {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}

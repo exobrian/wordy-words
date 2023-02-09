@@ -7,12 +7,21 @@
         <title>Wordle</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+        <link rel="stylesheet" href="./CSS/style.css">
+        <link href="https://fonts.cdnfonts.com/css/product-sans" rel="stylesheet">
     </head>
 
     <body>
         <h1> Wordle Clone </h1>
         <div id="game-board"></div>
-        <h1 class="animate__animated animate__bounce animate__delay-2s animate__infinite">An animated element</h1>
+        <h1 class="animate__animated animate__bounce animate__delay-2s animate__infinite">An animated element</h1>  
+        <div class="userInput">
+            <label for="numberOfLetters">Number of Letters</label>
+            <div>
+                <input type="number" min="1" max="31" id="numberOfLetters" value="5">            
+                <button onclick="isValidLength()">Generate</button>
+            </div>
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
