@@ -3,6 +3,8 @@ const wordsURL = "https://raw.githubusercontent.com/exobrian/Wordy-Words/main/re
 let maxWordLength = 0;
 let longestWord = "";
 let wordDictionary = {};
+let randInt;
+let correctWord;
 
 //Initialize with 5 letters to avoid ref errors
 let wordLengthSelected = 5;
@@ -12,10 +14,7 @@ fetch(wordsURL)
 .then(response => response.json())
 .then(json => {
     createDictionary(json);
-    let randInt = Math.floor(Math.random() * (wordDictionary[wordLengthSelected].length - 1));
-    let randWord = wordDictionary[wordLengthSelected][randInt];
-    console.log("Random Word: " + randWord);
-    console.log("Test: " + wordDictionary[maxWordLength][0]);
+    correctWord = getNewWord();
     console.log("Longest word is " + longestWord + ": " + maxWordLength + " letters");
 });
 
@@ -36,8 +35,26 @@ function createDictionary(words) {
 
 function isValidLength() {
     // function returns true if word length selected by the user exists in our dictionary
-    wordLengthSelected = document.getElementById("numberOfLetters").value;
-    console.log("Word Length is " + wordLengthSelected + " letters long.");
-    console.log(wordLengthSelected in wordDictionary ? "Word Length is valid." : "Word Length is invalid.");
-    return;
+    if (document.getElementById("numberOfLetters").value in wordDictionary) {
+        console.log("Word Length is valid.");
+        return true;
+    } else {
+        console.log("Word Length is invalid. Please select another length between 1 and " + maxWordLength + " long.");
+        return false;
+    }
+}
+
+function getNewWord() {
+    if (isValidLength()){
+        wordLengthSelected = document.getElementById("numberOfLetters").value;
+        randInt = Math.floor(Math.random() * (wordDictionary[wordLengthSelected].length - 1));
+        correctWord = wordDictionary[wordLengthSelected][randInt];
+        console.log("Word Length is " + wordLengthSelected + " letters long.");
+        console.log("New word is " + correctWord);
+
+        document.getElementById("correctWord").innerHTML = correctWord;
+    } else {
+        console.log("Current word is still " + correctWord);
+    }
+    return correctWord;
 }
