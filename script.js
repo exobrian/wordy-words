@@ -51,10 +51,10 @@ function getNewWord() {
         correctWord = wordDictionary[wordLengthSelected][randInt];
         console.log("Word Length is " + wordLengthSelected + " letters long.");
         console.log("New word is " + correctWord);
-
-        document.getElementById("correctWord").innerHTML = correctWord;
+        document.getElementById("correctWord").innerHTML = "New word is " + correctWord;
     } else {
         console.log("Current word is still " + correctWord);
+        document.getElementById("correctWord").innerHTML = "Word Length is invalid. Please select another length between 1 and " + maxWordLength + " long.";
     }
     return correctWord;
 }
