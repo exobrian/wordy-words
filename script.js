@@ -1,30 +1,34 @@
-const wordsPath = "./resources/wordsList.json";
-const wordsURL = "https://raw.githubusercontent.com/exobrian/Wordy-Words/main/resources/wordsList.json";
+const wordsURL = "https://raw.githubusercontent.com/exobrian/wordy-words/main/resources/wordsList.json";
 let maxWordLength = 0;
 let longestWord = "";
 let wordDictionary = {};
 let randInt;
 let correctWord;
+let guesses = [];
 
 //Initialize with 5 letters to avoid ref errors
 let wordLengthSelected = 5;
 
 // Need to run this first in order to force other functions to wait until the json file has been loaded.
+// Each chain returns a promise object. Then only called once preceding promise is fulfilled.
+// Need to add catch at the end of chain to handle exceptions. 
 fetch(wordsURL)
 .then(response => response.json())
 .then(json => {
     createDictionary(json);
     correctWord = getNewWord();
-    console.log("Longest word is " + longestWord + ": " + maxWordLength + " letters");
 });
 
 function createDictionary(words) {
     // Parse through json list of words. Create wordDictionary using lengths of words as keys and keep track of the longest word.
     for (let key in words){
+        // Keep track of the largest word in order to limit the number of letters allowed to be selected
         if (key.length > maxWordLength){
             maxWordLength = key.length;
             longestWord = key;
         }
+
+        // Create our dictionary by either appending words to the length keys or create a new array for the key.
         if (key.length in wordDictionary){
             wordDictionary[key.length].push(key);
         } else {
@@ -35,26 +39,48 @@ function createDictionary(words) {
 
 function isValidLength() {
     // function returns true if word length selected by the user exists in our dictionary
-    if (document.getElementById("numberOfLetters").value in wordDictionary) {
-        console.log("Word Length is valid.");
-        return true;
-    } else {
-        console.log("Word Length is invalid. Please select another length between 1 and " + maxWordLength + " long.");
-        return false;
-    }
+    return document.getElementById("number-of-letters").value in wordDictionary;
 }
 
 function getNewWord() {
+    // Check if word length is valid first. Then clear old board, create a new board, and select a random word from our dictionary.
     if (isValidLength()){
-        wordLengthSelected = document.getElementById("numberOfLetters").value;
+        wordLengthSelected = document.getElementById("number-of-letters").value;
         randInt = Math.floor(Math.random() * (wordDictionary[wordLengthSelected].length - 1));
         correctWord = wordDictionary[wordLengthSelected][randInt];
-        console.log("Word Length is " + wordLengthSelected + " letters long.");
-        console.log("New word is " + correctWord);
-        document.getElementById("correctWord").innerHTML = "New word is " + correctWord;
+        document.getElementById("correct-word").innerHTML = "New word is " + correctWord;
+        clearGameBoard();
+        initGameBoard();
     } else {
-        console.log("Current word is still " + correctWord);
-        document.getElementById("correctWord").innerHTML = "Word Length is invalid. Please select another length between 1 and " + maxWordLength + " long.";
+        document.getElementById("correct-word").innerHTML = "Word Length is invalid. Please select another length between 1-" + maxWordLength + ".";
     }
     return correctWord;
+}
+
+function initGameBoard(){
+    // Create the div containers for each letter in each guess.
+    let gameBoard = document.getElementById("game-board");
+    for (let i = 0; i < wordLengthSelected; i++){
+        let row = document.createElement("div");
+        row.className = "letter-row";
+
+        for (let j = 0; j < wordLengthSelected; j++){
+            let box = document.createElement("div");
+            box.className = "letter-box";
+            row.appendChild(box);
+        }
+
+        // add row of letter boxes to our gameboard
+        gameBoard.appendChild(row);
+    }
+}
+
+function clearGameBoard(){
+    // faster way of clearing child elements or letter boxes of our gameBoard.
+    let gameBoard = document.getElementById("game-board");
+    if (gameBoard.hasChildNodes()){
+        while(gameBoard.hasChildNodes()){
+            gameBoard.firstChild.remove();
+        }
+    }
 }
