@@ -110,6 +110,7 @@ function insertLetter(pressedKey) {
 }
 
 function checkGuess() {
+    //TODO)
 
 }
 
@@ -135,8 +136,10 @@ document.addEventListener("keyup", (e) => {
         return
     }
 
-    if (pressedKey === "Enter") {
+    if (pressedKey === "Enter" && currentIndex == wordLengthSelected) {
         checkGuess()
+        guessesRemaining -= 1;
+        currentIndex = 0;
         return
     }
 
