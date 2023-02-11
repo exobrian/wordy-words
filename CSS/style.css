@@ -5,6 +5,7 @@ body {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 }
 
 h1 {
@@ -29,10 +30,12 @@ h3 {
 
 .game-board {
     display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .letter-box {
-    border: 2px solid gray;
+    border: 2px #fff;
     border-radius: 7px;
     margin: 2px;
     font-size: 2.5rem;
@@ -78,4 +81,9 @@ h3 {
   .keyboard-row {
     display: flex;
     flex-direction: row;
+  }
+
+  .filled-box {
+    background-color: #fff;
+    color: #121212;
   }

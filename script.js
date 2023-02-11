@@ -4,10 +4,12 @@ let longestWord = "";
 let wordDictionary = {};
 let randInt;
 let correctWord;
-let guesses = [];
+let currentIndex = 0;
+let currentGuess = [];
 
 //Initialize with 5 letters to avoid ref errors
 let wordLengthSelected = 5;
+let guessesRemaining = wordLengthSelected;
 
 // Need to run this first in order to force other functions to wait until the json file has been loaded.
 // Each chain returns a promise object. Then only called once preceding promise is fulfilled.
@@ -46,6 +48,7 @@ function getNewWord() {
     // Check if word length is valid first. Then clear old board, create a new board, and select a random word from our dictionary.
     if (isValidLength()){
         wordLengthSelected = document.getElementById("number-of-letters").value;
+        guessesRemaining = wordLengthSelected;
         randInt = Math.floor(Math.random() * (wordDictionary[wordLengthSelected].length - 1));
         correctWord = wordDictionary[wordLengthSelected][randInt];
         document.getElementById("correct-word").innerHTML = "New word is " + correctWord;
@@ -62,6 +65,7 @@ function initGameBoard(){
     let gameBoard = document.getElementById("game-board");
     for (let i = 0; i < wordLengthSelected; i++){
         let row = document.createElement("div");
+        console.log("creating a row:");
         row.className = "letter-row";
 
         for (let j = 0; j < wordLengthSelected; j++){
@@ -84,3 +88,62 @@ function clearGameBoard(){
         }
     }
 }
+
+function checkGuess() {
+    // TODO
+}
+
+function insertLetter(pressedKey) {
+    // Check if we have any more space for new letters first. Then add letter.
+    if (currentIndex == wordLengthSelected){
+        console.log("Word guessed is " + currentGuess);
+        return;
+    }
+
+    pressedKey = pressedKey.toLowerCase();
+    let row = document.getElementsByClassName("letter-row")[wordLengthSelected - guessesRemaining];
+    let box = row.children[currentIndex];
+    box.textContent = pressedKey;
+    box.classList.add("filled-box");
+    currentGuess.push(pressedKey);
+    currentIndex += 1;
+}
+
+function checkGuess() {
+
+}
+
+function deleteLetter() {
+    let row = document.getElementsByClassName("letter-row")[wordLengthSelected - guessesRemaining];
+    let box = row.children[currentIndex - 1];
+    box.textContent = "";
+    box.classList.remove("filled-box");
+    currentGuess.pop();
+    currentIndex -= 1;
+}
+
+// Event listener for key presses
+document.addEventListener("keyup", (e) => {
+
+    if (guessesRemaining === 0) {
+        return;
+    }
+
+    let pressedKey = String(e.key)
+    if (pressedKey === "Backspace" && currentIndex !== 0) {
+        deleteLetter()
+        return
+    }
+
+    if (pressedKey === "Enter") {
+        checkGuess()
+        return
+    }
+
+    let found = pressedKey.match(/[a-z]/gi)
+    if (!found || found.length > 1) {
+        return
+    } else {
+        insertLetter(pressedKey)
+    }
+})
