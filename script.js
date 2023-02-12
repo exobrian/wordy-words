@@ -14,6 +14,7 @@ let guessesRemaining = wordLengthSelected;
 // Need to run this first in order to force other functions to wait until the json file has been loaded.
 // Each chain returns a promise object. Then only called once preceding promise is fulfilled.
 // Need to add catch at the end of chain to handle exceptions. 
+
 fetch(wordsURL)
 .then(response => response.json())
 .then(json => {
