@@ -33,12 +33,16 @@ function writeDictionary(fileName){
 }
 
 function createDictionary() {
+    wordDictionary['longestWord'] = "";
+    wordDictionary['maxWordLength'] = "";
     // Parse through json list of words. Create wordDictionary using lengths of words as keys and keep track of the longest word.
     for (let key in words){
         // Keep track of the largest word in order to limit the number of letters allowed to be selected
         if (key.length > maxWordLength){
             maxWordLength = key.length;
             longestWord = key;
+            wordDictionary['maxWordLength'] = key.length;
+            wordDictionary['longestWord'] = key;
         }
 
         // Create our dictionary by either appending words to the length keys or create a new array for the key.

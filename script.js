@@ -1,4 +1,5 @@
-const wordsURL = "https://raw.githubusercontent.com/exobrian/wordy-words/main/resources/wordsList.json";
+//const wordsURL = "https://raw.githubusercontent.com/exobrian/wordy-words/main/resources/wordsList.json";
+const wordsURL = "https://github.com/exobrian/wordy-words/blob/main/resources/wordsListCleaned.json"
 let maxWordLength = 0;
 let longestWord = "";
 let wordDictionary = {};
@@ -18,8 +19,12 @@ let guessesRemaining = wordLengthSelected;
 fetch(wordsURL)
 .then(response => response.json())
 .then(json => {
-    createDictionary(json);
+    //createDictionary(json);
+    wordDictionary = json;
+    maxWordLength = wordDictionary['maxWordLength'];
+    longestWord = wordDictionary['longestWord'];
     correctWord = getNewWord();
+    console.log("Longest Word is now: " + longestWord)
 });
 
 function createDictionary(words) {
