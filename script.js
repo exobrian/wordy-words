@@ -2,7 +2,7 @@ const wordsURL = "https://raw.githubusercontent.com/exobrian/wordy-words/main/re
 let randInt;
 let correctWord;
 let currentIndex = 0;
-let currentGuess = [];
+let currentGuess = "";
 let wordDictionary = {};
 let maxWordLength;
 let longestWord;
@@ -84,7 +84,7 @@ function checkGuess() {
 
 function insertLetter(pressedKey) {
     // Check if we have any more space for new letters first. Then add letter.
-    if (currentIndex == wordLengthSelected){
+    if (currentIndex >= wordLengthSelected){
         console.log("Word guessed is " + currentGuess);
         return;
     }
@@ -94,12 +94,15 @@ function insertLetter(pressedKey) {
     let box = row.children[currentIndex];
     box.textContent = pressedKey;
     box.classList.add("filled-box");
-    currentGuess.push(pressedKey);
+    currentGuess = currentGuess + pressedKey;
     currentIndex += 1;
 }
 
 function checkGuess() {
-    //TODO)
+    //TODO
+    if (currentGuess == correctWord){
+        alert("You've done it!");
+    }
 
 }
 
@@ -108,7 +111,7 @@ function deleteLetter() {
     let box = row.children[currentIndex - 1];
     box.textContent = "";
     box.classList.remove("filled-box");
-    currentGuess.pop();
+    currentGuess = currentGuess.slice(0, currentGuess.length - 2);
     currentIndex -= 1;
 }
 
@@ -125,15 +128,16 @@ function addKeyListener(){
             return
         }
 
-        if (pressedKey === "Enter" && currentIndex == wordLengthSelected) {
+        if (pressedKey === "Enter" && currentIndex >= wordLengthSelected) {
             checkGuess()
             guessesRemaining -= 1;
             currentIndex = 0;
+            currentGuess = "";
             return
         }
 
         let found = pressedKey.match(/[a-z]/gi)
-        if (!found || found.length > 1) {
+        if (!found || pressedKey.length > 1) {
             return
         } else {
             insertLetter(pressedKey);
