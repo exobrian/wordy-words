@@ -26,7 +26,7 @@ fetch(wordsURL)
 })
 .catch((error) => {
     console.log(error);
-    location.reload();
+    //location.reload();
 }); 
 
 function isValidLength() {
@@ -80,6 +80,14 @@ function clearGameBoard(){
 
 function checkGuess() {
     // TODO
+    // if win, make all green and send toast. Then end game.
+    // if wrong, but guessRemaining > 0 then color letters in the correct place green; correct letters in the wrong place yellow
+    // if wrong, and guessRemaining = 0, then game over
+
+    if (currentGuess === correctWord){
+        alert("Congratulations! You win!");
+
+    }
 }
 
 function insertLetter(pressedKey) {
@@ -99,11 +107,39 @@ function insertLetter(pressedKey) {
 }
 
 function checkGuess() {
-    //TODO
-    if (currentGuess == correctWord){
-        alert("You've done it!");
-    }
+    const green = "#6ca965";
+    const yellow = "#c8b653";
+    const row = document.getElementsByClassName("letter-row")[wordLengthSelected - guessesRemaining];
+    let letterCounts = new Array(26).fill(0);
 
+    //Check for correct letters in the correct spot first
+    for (let i = 0; i < correctWord.length; i++){
+        if (currentGuess.charAt(i) === correctWord.charAt(i)){
+            row.children[i].style.backgroundColor = green;
+        } else {
+            //Keep count of letters that are correct but not in the right spot
+            let letterIndex = correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97;
+            console.log("CurrentLetter: " + correctWord.charAt(i));
+            console.log("CurrentLetterIndex: " + letterIndex);
+            letterCounts[letterIndex] += 1;
+            console.log("LetterCount: " + letterCounts[letterIndex]); 
+        }
+    }
+    //Check for correct letters in the wrong spots after counting correct letters. Decrease count after coloring yellow.
+    for (let i = 0; i < correctWord.length; i++){
+        if ((currentGuess.charAt(i) != correctWord.charAt(i)) && (correctWord.includes(currentGuess.charAt(i)))  && (letterCounts[correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97] > 0)){
+            row.children[i].style.backgroundColor = yellow;
+            letterCounts[correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97] -= 1;
+            console.log("Letter: " + correctWord.charAt(i).toLowerCase());
+            console.log("Index: " + String(correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97));
+            console.log("Count: " + letterCounts[correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97]);
+        }
+    }
+    
+    if (currentGuess == correctWord){
+        alert("You've done it!");        
+        row.childNodes.forEach(node => node.style.backgroundColor = green);
+    }
 }
 
 function deleteLetter() {
