@@ -78,18 +78,6 @@ function clearGameBoard(){
     }
 }
 
-function checkGuess() {
-    // TODO
-    // if win, make all green and send toast. Then end game.
-    // if wrong, but guessRemaining > 0 then color letters in the correct place green; correct letters in the wrong place yellow
-    // if wrong, and guessRemaining = 0, then game over
-
-    if (currentGuess === correctWord){
-        alert("Congratulations! You win!");
-
-    }
-}
-
 function insertLetter(pressedKey) {
     // Check if we have any more space for new letters first. Then add letter.
     if (currentIndex >= wordLengthSelected){
@@ -118,21 +106,15 @@ function checkGuess() {
             row.children[i].style.backgroundColor = green;
         } else {
             //Keep count of letters that are correct but not in the right spot
-            let letterIndex = correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97;
-            console.log("CurrentLetter: " + correctWord.charAt(i));
-            console.log("CurrentLetterIndex: " + letterIndex);
+            let letterIndex = correctWord.charAt(i).toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0);
             letterCounts[letterIndex] += 1;
-            console.log("LetterCount: " + letterCounts[letterIndex]); 
         }
     }
     //Check for correct letters in the wrong spots after counting correct letters. Decrease count after coloring yellow.
     for (let i = 0; i < correctWord.length; i++){
-        if ((currentGuess.charAt(i) != correctWord.charAt(i)) && (correctWord.includes(currentGuess.charAt(i)))  && (letterCounts[correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97] > 0)){
+        if ((currentGuess.charAt(i) != correctWord.charAt(i)) && (letterCounts[currentGuess.charAt(i).toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0)] > 0)){
             row.children[i].style.backgroundColor = yellow;
-            letterCounts[correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97] -= 1;
-            console.log("Letter: " + correctWord.charAt(i).toLowerCase());
-            console.log("Index: " + String(correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97));
-            console.log("Count: " + letterCounts[correctWord.charAt(i).toLowerCase().charCodeAt(0) - 97]);
+            letterCounts[currentGuess.charAt(i).toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0)] -= 1;
         }
     }
     
