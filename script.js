@@ -134,7 +134,7 @@ function deleteLetter() {
     let box = row.children[currentIndex - 1];
     box.textContent = "";
     box.classList.remove("filled-box");
-    currentGuess = currentGuess.slice(0, currentGuess.length - 2);
+    currentGuess = currentGuess.slice(0, currentGuess.length - 1);
     currentIndex -= 1;
 }
 
@@ -147,7 +147,7 @@ function addKeyListener(){
 
         let pressedKey = String(e.key)
         if (pressedKey === "Backspace" && currentIndex !== 0) {
-            deleteLetter()
+            deleteLetter();
             return
         }
 
@@ -156,10 +156,9 @@ function addKeyListener(){
             if (!WORDS[wordLengthSelected].includes(currentGuess)){
                 console.log(currentGuess);
                 toastr.error("Word guessed is not a valid word. Try again!");
-
                 return;
             }
-            checkGuess()
+            checkGuess();
             guessesRemaining -= 1;
             currentIndex = 0;
             currentGuess = "";
