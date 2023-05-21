@@ -23,6 +23,7 @@ fetch(wordsURL)
 .then(() => {
     correctWord = getNewWord();
     addKeyListener();
+    addOnscreenListener();
 })
 .catch((error) => {
     console.log(error);
@@ -154,7 +155,7 @@ function addKeyListener(){
         if (pressedKey === "Enter" && currentIndex >= wordLengthSelected) {
             //Check if word is valid.
             if (!WORDS[wordLengthSelected].includes(currentGuess)){
-                console.log(currentGuess);
+                console.log(currentGuess + " is invalid");
                 toastr.error("Word guessed is not a valid word. Try again!");
                 return;
             }
@@ -172,4 +173,23 @@ function addKeyListener(){
             insertLetter(pressedKey);
         }
     })
+}
+
+// Event listener for onscreen keyboard presses.
+function addOnscreenListener(){
+    document.getElementById("keyboard-container").addEventListener("click", (e) => {
+        const target = e.target;
+        if (!target.classList.contains("keyboard-button")){
+            return;            
+        }
+        let key = target.textContent;
+
+        // Onscreen keyboard shows "Del" instead of Backspace
+        if (key === "Del"){
+            key = "Backspace";
+        }
+
+        document.dispatchEvent(new KeyboardEvent("keyup", {key: key}));
+    }
+    )
 }
