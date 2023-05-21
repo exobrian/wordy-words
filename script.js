@@ -3,7 +3,7 @@ let randInt;
 let correctWord;
 let currentIndex = 0;
 let currentGuess = "";
-let wordDictionary = {};
+let WORDS = {};
 let maxWordLength;
 let longestWord;
 
@@ -17,9 +17,9 @@ let guessesRemaining = wordLengthSelected;
 fetch(wordsURL)
 .then(response => response.json())
 .then(json => {
-    wordDictionary = json;
-    maxWordLength = wordDictionary['maxWordLength'];
-    longestWord = wordDictionary['longestWord'];})
+    WORDS = json;
+    maxWordLength = WORDS['maxWordLength'];
+    longestWord = WORDS['longestWord'];})
 .then(() => {
     correctWord = getNewWord();
     addKeyListener();
@@ -31,7 +31,7 @@ fetch(wordsURL)
 
 function isValidLength() {
     // function returns true if word length selected by the user exists in our dictionary
-    return document.getElementById("number-of-letters").value in wordDictionary;
+    return document.getElementById("number-of-letters").value in WORDS;
 }
 
 function getNewWord() {
@@ -39,8 +39,8 @@ function getNewWord() {
     if (isValidLength()){
         wordLengthSelected = document.getElementById("number-of-letters").value;
         guessesRemaining = wordLengthSelected;
-        randInt = Math.floor(Math.random() * (wordDictionary[wordLengthSelected].length - 1));
-        correctWord = wordDictionary[wordLengthSelected][randInt];
+        randInt = Math.floor(Math.random() * (WORDS[wordLengthSelected].length - 1));
+        correctWord = WORDS[wordLengthSelected][randInt];
         document.getElementById("correct-word").innerHTML = "New word is " + correctWord;
         clearGameBoard();
         initGameBoard();
@@ -52,6 +52,8 @@ function getNewWord() {
 
 function initGameBoard(){
     // Create the div containers for each letter in each guess.
+    currentIndex = 0;
+    currentGuess = "";
     let gameBoard = document.getElementById("game-board");
     for (let i = 0; i < wordLengthSelected; i++){
         let row = document.createElement("div");
@@ -100,6 +102,13 @@ function checkGuess() {
     const row = document.getElementsByClassName("letter-row")[wordLengthSelected - guessesRemaining];
     let letterCounts = new Array(26).fill(0);
 
+    //Check if won first.
+    if (currentGuess == correctWord){
+        toastr.success("You've guessed the correct word! Congrats!")       
+        row.childNodes.forEach(node => node.style.backgroundColor = green);
+        return;
+    }
+
     //Check for correct letters in the correct spot first
     for (let i = 0; i < correctWord.length; i++){
         if (currentGuess.charAt(i) === correctWord.charAt(i)){
@@ -110,17 +119,13 @@ function checkGuess() {
             letterCounts[letterIndex] += 1;
         }
     }
+
     //Check for correct letters in the wrong spots after counting correct letters. Decrease count after coloring yellow.
     for (let i = 0; i < correctWord.length; i++){
         if ((currentGuess.charAt(i) != correctWord.charAt(i)) && (letterCounts[currentGuess.charAt(i).toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0)] > 0)){
             row.children[i].style.backgroundColor = yellow;
             letterCounts[currentGuess.charAt(i).toLowerCase().charCodeAt(0) - 'a'.charCodeAt(0)] -= 1;
         }
-    }
-    
-    if (currentGuess == correctWord){
-        alert("You've done it!");        
-        row.childNodes.forEach(node => node.style.backgroundColor = green);
     }
 }
 
@@ -147,6 +152,13 @@ function addKeyListener(){
         }
 
         if (pressedKey === "Enter" && currentIndex >= wordLengthSelected) {
+            //Check if word is valid.
+            if (!WORDS[wordLengthSelected].includes(currentGuess)){
+                console.log(currentGuess);
+                toastr.error("Word guessed is not a valid word. Try again!");
+
+                return;
+            }
             checkGuess()
             guessesRemaining -= 1;
             currentIndex = 0;
@@ -155,7 +167,7 @@ function addKeyListener(){
         }
 
         let found = pressedKey.match(/[a-z]/gi)
-        if (!found || pressedKey.length > 1) {
+        if (!found || pressedKey.length > 1 || currentIndex >= wordLengthSelected) {
             return
         } else {
             insertLetter(pressedKey);

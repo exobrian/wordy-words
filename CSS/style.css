@@ -52,7 +52,7 @@ h3 {
     align-items: center;
 }
 
-#keyboard-display div {
+#keyboard-container div {
     display: flex;
     align-items: center;
     justify-content: center;
