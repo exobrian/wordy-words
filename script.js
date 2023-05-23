@@ -42,13 +42,17 @@ function getNewWord() {
         guessesRemaining = wordLengthSelected;
         randInt = Math.floor(Math.random() * (WORDS[wordLengthSelected].length - 1));
         correctWord = WORDS[wordLengthSelected][randInt];
-        document.getElementById("correct-word").innerHTML = "New word is " + correctWord;
+        //document.getElementById("correct-word").innerHTML = "New word is " + correctWord;
         clearGameBoard();
         initGameBoard();
     } else {
         document.getElementById("correct-word").innerHTML = "Word Length is invalid. Please select another length between 1-" + maxWordLength + ".";
     }
     return correctWord;
+}
+
+function getAnswer() {
+    document.getElementById("correct-word").innerHTML = "The correct word is " + correctWord;
 }
 
 function initGameBoard(){
