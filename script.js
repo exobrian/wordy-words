@@ -82,6 +82,7 @@ function clearGameBoard(){
         while(gameBoard.hasChildNodes()){
             gameBoard.firstChild.remove();
         }
+        document.getElementById("correct-word").innerHTML = "";
     }
 }
 
@@ -109,7 +110,7 @@ function checkGuess() {
 
     //Check if won first.
     if (currentGuess == correctWord){
-        toastr.success("You've guessed the correct word! Congrats!")       
+        toastr.success("You've guessed the correct word! Congrats!");
         row.childNodes.forEach(node => node.style.backgroundColor = green);
         return;
     }
@@ -196,4 +197,9 @@ function addOnscreenListener(){
         document.dispatchEvent(new KeyboardEvent("keyup", {key: key}));
     }
     )
+}
+
+// Share button to copy smal image of attempts to the clipboard
+function shareAttempts() {
+    toastr.success("Progress copied to the clipboard!");
 }

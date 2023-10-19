@@ -43,9 +43,9 @@ h3 {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: auto;
     margin-left: auto;
     margin-right: auto;
+    overflow: auto;
     max-width: 50vh;
     max-height: 60vw;
 }
