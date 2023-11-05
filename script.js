@@ -201,5 +201,5 @@ function addOnscreenListener(){
 
 // Share button to copy smal image of attempts to the clipboard
 function shareAttempts() {
-    toastr.success("Progress copied to the clipboard!");
+    toastr.success("Feature coming soon!");
 }
